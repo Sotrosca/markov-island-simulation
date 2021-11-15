@@ -85,12 +85,15 @@ function drawEdges(positionList, radius, lineWidth, color) {
     }
 }
 
-function drawAgents(agentsIdList, x, y, radiusCircle, radiusAgent, color, textColor) {
+
+function drawAgents(agentsIdList, x, y, radiusCircle, radiusAgent, agentColorsList, textColor) {
     if (agentsIdList != null) {
+        let coloursQuantity = agentColorsList.length;
         // Draw agents using calculateNBorderPointsOfCircle
         var points = calculateNBorderPointsOfCircle(x, y, radiusCircle, agentsIdList.length);
         for (var i = 0; i < agentsIdList.length; i++) {
-            drawCircle(points[i][0], points[i][1], radiusAgent, color, agentsIdList[i], textColor);
+            let colorPositionList = agentsIdList[i] % coloursQuantity;
+            drawCircle(points[i][0], points[i][1], radiusAgent, agentColorsList[colorPositionList], agentsIdList[i], textColor);
         }
     }
 }
@@ -100,6 +103,29 @@ function fillBackground(color) {
     var ctx = c.getContext("2d");
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawCircleTransitionMove(x1, y1, x2, y2, radius, color, text, textColor) {
+    // Draw circle and clear to draw circle next step until draw the circle at the final position
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    let numberOfSteps = 10;
+    let step = 0;
+    let x = x1;
+    let y = y1;
+    let xStep = (x2 - x1) / numberOfSteps;
+    let yStep = (y2 - y1) / numberOfSteps;
+    let interval = setInterval(function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawCircle(x, y, radius, color, text, textColor);
+        x += xStep;
+        y += yStep;
+        step++;
+        if (step == numberOfSteps) {
+            clearInterval(interval);
+        }
+    }
+    , 50);
 }
 
 

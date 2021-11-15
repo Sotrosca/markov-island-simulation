@@ -1,17 +1,19 @@
 let nodesQuantity = 5;
-let agentsQuantity = 10;
+let agentsQuantity = 20;
 let probabilityMatrix = [];
-let nodeRadius = 70;
-let agentRadius = 20;
+let nodeRadius = 80;
+let agentRadius = 15;
 let agentCircleReference = 55;
 
-let backgroundColor = "rgba(66, 199, 58, 1)";
-let nodeColor = "rgba(182, 109, 27, 1)";
+let backgroundColor = "rgba(61, 121, 253, 0.87)";
+let nodeColor = "rgba(29, 206, 32, 1)";
 let nodeTextColor = "black";
-let edgeColor = "rgba(170, 57, 58, 1)";
-let agentColor = "blue";
+let edgeColor = "rgba(102, 110, 101, 0.48)";
+let agentColor = "red";
 let agentTextColor = "black";
 let canvasBorderColor = "black";
+
+let agentColorsList = ["red", "yellow", "fuchsia", "darkslateblue", "green", "blue", "purple", "orange", "brown", "pink", "grey", "darkgrey", "lightgrey", "white"];
 
 // Get canvas size
 let canvas = document.getElementById("myCanvas");
@@ -62,7 +64,7 @@ function drawSimulation() {
 
     // Draw all agents in their initial positions using drawAgents
     for (var i = 0; i < nodesQuantity; i++) {
-        drawAgents(nodesAgentListDict[i], nodesPositions[i][0], nodesPositions[i][1], agentCircleReference, agentRadius, agentColor, agentTextColor);
+        drawAgents(nodesAgentListDict[i], nodesPositions[i][0], nodesPositions[i][1], agentCircleReference, agentRadius, agentColorsList, agentTextColor);
     }
 }
 
