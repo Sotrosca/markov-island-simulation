@@ -127,14 +127,3 @@ function drawCircleTransitionMove(x1, y1, x2, y2, radius, color, text, textColor
     }
     , 50);
 }
-
-
-drawCircle(100, 100, 70, "red", "1", "black");
-drawCircle(300, 300, 70, "red", "2", "black");
-drawLineConnectingTwoCircles(100, 100, 300, 300, 70, 70, 5, "black");
-
-let points = calculateNBorderPointsOfCircle(100, 100, 60, 3);
-
-for (var i = 0; i < points.length; i++) {
-    drawCircle(points[i][0], points[i][1], 10, "green", i + 1, "black");
-}
