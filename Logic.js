@@ -12,7 +12,7 @@ class Simulation {
         for (var i = 0; i < agentsQuantity; i++) {
             agents.push(new Agent(i, this.getRandomNode()));
         }
-        console.log(agents);
+
         return agents;
     }
 
@@ -62,16 +62,4 @@ class Agent {
         this.node = newNode;
     }
 }
-
-let nodesQuantity = 2;
-let agentsQuantity = 2;
-let probabilityMatrix = [];
-
-for (var i = 0; i < nodesQuantity; i++) {
-    probabilityMatrix[i] = [];
-    for (var j = 0; j < nodesQuantity; j++) {
-        probabilityMatrix[i][j] = 1 / nodesQuantity;
-    }
-}
-let simulation = new Simulation(nodesQuantity, agentsQuantity, probabilityMatrix);
 
