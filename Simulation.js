@@ -1,9 +1,9 @@
 let nodesQuantity = 5;
-let agentsQuantity = 20;
+let agentsQuantity = 50;
 let probabilityMatrix = [];
-let nodeRadius = 80;
-let agentRadius = 15;
-let agentCircleReference = 55;
+let nodeRadius = 180;
+let agentRadius = 20;
+let agentCircleReference = 160;
 
 let backgroundColor = "rgba(61, 121, 253, 0.87)";
 let nodeColor = "rgba(29, 206, 32, 1)";
