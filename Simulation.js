@@ -1,9 +1,16 @@
-let nodesQuantity = 5;
-let agentsQuantity = 50;
+// Get element button with id="next"
+let nextButton = document.getElementById("next");
+
+// Get element with id="agent-color"
+let agentColorElement = document.getElementById("agent-color");
+
+let nodesQuantity = 10;
+let agentsQuantity = 10;
 let probabilityMatrix = [];
-let nodeRadius = 180;
+let nodeRadius = 120;
 let agentRadius = 20;
-let agentCircleReference = 160;
+let agentCircleReference = 100;
+let isColorByIsland = agentColorElement.checked;
 
 let backgroundColor = "rgba(61, 121, 253, 0.87)";
 let nodeColor = "rgba(29, 206, 32, 1)";
@@ -13,7 +20,7 @@ let agentColor = "red";
 let agentTextColor = "black";
 let canvasBorderColor = "black";
 
-let agentColorsList = ["red", "yellow", "fuchsia", "darkslateblue", "green", "blue", "purple", "orange", "brown", "pink", "grey", "darkgrey", "lightgrey", "white"];
+let colorsList = ["red", "yellow", "fuchsia", "darkslateblue", "green", "blue", "purple", "orange", "brown", "pink", "grey", "darkgrey", "lightgrey", "white"];
 
 // Get canvas size
 let canvas = document.getElementById("myCanvas");
@@ -56,7 +63,7 @@ function drawSimulation() {
     fillBackground(backgroundColor)
     drawCanvasBorder(canvasWidth, canvasHeight, 5, canvasBorderColor);
 
-    drawCircles(nodesPositions, nodeRadius, nodeColor, nodeTextColor);
+    drawCircles(nodesPositions, nodeRadius, nodeColor, nodeTextColor, isColorByIsland, colorsList);
 
     drawEdges(nodesPositions, nodeRadius, 1, edgeColor);
 
@@ -64,7 +71,7 @@ function drawSimulation() {
 
     // Draw all agents in their initial positions using drawAgents
     for (var i = 0; i < nodesQuantity; i++) {
-        drawAgents(nodesAgentListDict[i], nodesPositions[i][0], nodesPositions[i][1], agentCircleReference, agentRadius, agentColorsList, agentTextColor);
+        drawAgents(nodesAgentListDict[i], nodesPositions[i][0], nodesPositions[i][1], agentCircleReference, agentRadius, colorsList, agentTextColor, isColorByIsland, simulation.agents);
     }
 }
 
@@ -73,10 +80,15 @@ function nextStep() {
     drawSimulation();
 }
 
-// Get element button with id="next"
-let nextButton = document.getElementById("next");
+// Add event listener to agent-color element
+agentColorElement.addEventListener("change", function (e) {
+    isColorByIsland = e.target.checked;
+    drawSimulation();
+});
 
 // Add event listener to call drawSimulation on click
 nextButton.addEventListener("click", nextStep);
 
+
 drawSimulation();
+

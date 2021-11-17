@@ -9,11 +9,21 @@
 <body>
     <h1>Islas de Markov</h1>
     <!--Button with id="next"-->
-    <div>
+    <div id="next-previous">
         <!--Button with id="next"-->
         <button id="next">Next</button>
         <button id="previous">Previous</button>
     </div>
+    <div id=agent-color-div>
+        <p>Color de agentes por isla</p>
+        <label class="switch">
+            <input type="checkbox" id="agent-color">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+
+    <!--Canvas with id="myCanvas"-->
         <canvas id="myCanvas" width="1600" height="800"></canvas>
     <script src="./Drawer.js"></script>
     <script src="./Logic.js"></script>

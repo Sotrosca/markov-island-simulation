@@ -52,8 +52,11 @@ function drawLineConnectingTwoCircles(x1, y1, x2, y2, radius1, radius2, lineWidt
     drawLine(points[0][0], points[0][1], points[1][0], points[1][1], lineWidth, color);
 }
 
-function drawCircles(positionList, radius, color, textColor){
+function drawCircles(positionList, radius, color, textColor, isColorByIsland, colorList) {
     for (var i = 0; i < positionList.length; i++) {
+        if (isColorByIsland){
+            textColor = colorList[i];
+        }
         drawCircle(positionList[i][0], positionList[i][1], radius, color, i + 1, textColor);
     }
 }
@@ -86,14 +89,19 @@ function drawEdges(positionList, radius, lineWidth, color) {
 }
 
 
-function drawAgents(agentsIdList, x, y, radiusCircle, radiusAgent, agentColorsList, textColor) {
+function drawAgents(agentsIdList, x, y, radiusCircle, radiusAgent, colorsList, textColor, isColorByIsland, agentList) {
     if (agentsIdList != null) {
-        let coloursQuantity = agentColorsList.length;
+        let coloursQuantity = colorsList.length;
         // Draw agents using calculateNBorderPointsOfCircle
         var points = calculateNBorderPointsOfCircle(x, y, radiusCircle, agentsIdList.length);
         for (var i = 0; i < agentsIdList.length; i++) {
-            let colorPositionList = agentsIdList[i] % coloursQuantity;
-            drawCircle(points[i][0], points[i][1], radiusAgent, agentColorsList[colorPositionList], agentsIdList[i], textColor);
+            let colorPositionList = null;
+            if (isColorByIsland){
+                colorPositionList = agentList[agentsIdList[i]].initNode % coloursQuantity;
+            } else{
+                colorPositionList = agentsIdList[i] % coloursQuantity;
+            }
+            drawCircle(points[i][0], points[i][1], radiusAgent, colorsList[colorPositionList], agentsIdList[i], textColor);
         }
     }
 }

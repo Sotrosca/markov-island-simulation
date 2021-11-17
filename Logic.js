@@ -56,6 +56,7 @@ class Agent {
     constructor(id, initNode) {
         this.id = id;
         this.node = initNode;
+        this.initNode = initNode;
     }
 
     move(newNode) {
