@@ -12,26 +12,28 @@
     <h1>Islas de Markov</h1>
     <!--Button with id="next"-->
     <div class="left">
-        <div id="reset-div">
-            <button id="reset">Reset</button>
+        <div id="reset-div" class="row-side">
+            <button id="reset">Reset <br> Agents</button>
         </div>
-        <div>
+        <div class="row-side">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Launch
+                Probabilidades
             </button>
         </div>
     </div>
     <div class="right">
-        <div id="next-div">
+        <div id="next-div" class="row-side">
             <!--Button with id="next"-->
             <button id="next">Next</button>
         </div>
-        <div id=agent-color-div>
-            <p>Color de agentes por isla</p>
-            <label class="switch">
-                <input type="checkbox" id="agent-color">
-                <span class="slider round"></span>
-            </label>
+        <div id=agent-color-div class="row-side">
+            <p>Color por isla</p>
+            <div>
+                <label class="switch">
+                    <input type="checkbox" id="agent-color">
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -42,17 +44,17 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Matriz de probabilidades</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
-            <div class="modal-body">
-            ...
+            <div id="modal-body" class="modal-body">
+                <table id="probability-matrix"></table>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" id='save-matrix' class="btn btn-primary" data-dismiss="modal">Guardar</button>
             </div>
         </div>
         </div>

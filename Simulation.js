@@ -4,12 +4,12 @@ let nextButton = document.getElementById("next");
 // Get element with id="agent-color"
 let agentColorElement = document.getElementById("agent-color");
 
-let nodesQuantity = 10;
-let agentsQuantity = 100;
+let nodesQuantity = 4;
+let agentsQuantity = 20;
 let probabilityMatrix = [];
-let nodeRadius = 90;
+let nodeRadius = 70;
 let agentRadius = 12;
-let agentCircleReference = 80;
+let agentCircleReference = 50;
 let isColorByIsland = agentColorElement.checked;
 
 let backgroundColor = "rgba(61, 121, 253, 0.87)";
@@ -89,6 +89,63 @@ agentColorElement.addEventListener("change", function (e) {
 // Add event listener to call drawSimulation on click
 nextButton.addEventListener("click", nextStep);
 
+// Function that generate html with the probability matrix input
+function generateProbabilityMatrixInput() {
+    let html = "";
+    // Generate header with the nodes names
+    html += "<tr>";
+    for (var i = -1; i < nodesQuantity; i++) {
+        if (i === -1) {
+            html += "<th></th>";
+        } else {
+            html += "<th>" + (i + 1) + "</th>";
+        }
+    }
+    html += "</tr>";
+
+    // Generate rows with the probability matrix
+    for (var i = 0; i < nodesQuantity; i++) {
+        html += "<tr>";
+        for (var j = -1; j < nodesQuantity; j++) {
+            if (j == -1) {
+                html += "<td>" + (i+1) + "</td>";
+            } else {
+                html += "<td><input type='number' class='matrix-input' id='" + i + "-" + j + "' value='" + simulation.probabilityMatrix[i][j] + "' min='0' max='1' step='0.01'></td>";
+            }
+        }
+        html += "</tr>";
+    }
+
+    return html;
+
+}
+
+function changeProbabilityMatrix() {
+    let matrixInputs = document.getElementsByClassName("matrix-input");
+    let newProbabilityMatrix = [];
+    for (var i = 0; i < nodesQuantity; i++) {
+        newProbabilityMatrix[i] = [];
+        for (var j = 0; j < nodesQuantity; j++) {
+            newProbabilityMatrix[i][j] = parseFloat(matrixInputs[i * nodesQuantity + j].value);
+        }
+    }
+
+    simulation.probabilityMatrix = newProbabilityMatrix;
+    drawSimulation();
+}
+
+function resetSimulationAgents() {
+    simulation.resetAgents();
+    drawSimulation();
+}
+
+document.getElementById("probability-matrix").innerHTML = generateProbabilityMatrixInput();
+
+$('#exampleModal').modal('handleUpdate');
+
+document.getElementById("save-matrix").addEventListener("click", changeProbabilityMatrix);
+
+document.getElementById("reset").addEventListener("click", resetSimulationAgents);
 
 drawSimulation();
 

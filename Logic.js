@@ -16,6 +16,12 @@ class Simulation {
         return agents;
     }
 
+    resetAgents() {
+        for (var i = 0; i < this.agentsQuantity; i++) {
+            this.agents[i].reset();
+        }
+    }
+
     getRandomNode() {
         // Get random node
         return Math.floor(Math.random() * this.nodesQuantity);
@@ -61,6 +67,10 @@ class Agent {
 
     move(newNode) {
         this.node = newNode;
+    }
+
+    reset() {
+        this.initNode = this.node;
     }
 }
 

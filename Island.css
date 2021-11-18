@@ -7,6 +7,27 @@ h1{
     align-items: center;
 }
 
+#modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.matrix-input {
+    text-align: center;
+    width: 4rem;
+}
+
+td {
+    width: 2rem;
+    text-align: center;
+}
+
+th{
+    width: 2rem;
+    text-align: center;
+}
+
 /* canvas size relative to the window size */
 canvas{
     display: block;
@@ -19,17 +40,21 @@ canvas{
 .left{
     float: left;
     width : 6rem;
-    margin-left: 3rem;
+    margin-left: 2rem;
 }
 
 .right{
     float: right;
     width : 6rem;
-    margin-right: 3rem;
+    margin-right: 2rem;
 
 }
 
-
+.row-side {
+    margin-top : 1rem;
+    margin-bottom : 1rem;
+    justify-content: center;
+}
 
 #next {
     position: relative;
@@ -63,16 +88,26 @@ canvas{
 /* div with id="agent-color" on left and middle of screen, nice font */
 #agent-color-div {
     position: relative;
-    display: inline;
+    display: block;
+    align-items: center;
+    justify-content: center;
     font-family: sans-serif;
     font-size: 0.8rem;
-    text-align: center;
+}
+
+.modal-dialog{
+    position: relative;
+    display: table; /* This is important */
+    overflow-y: auto;
+    overflow-x: auto;
+    width: auto;
+    min-width: 300px;
 }
 
  /* The switch - the box around the slider */
 .switch {
     position: relative;
-    display: inline-block;
+    display: block;
     width: 60px;
     height: 34px;
 }
