@@ -5,11 +5,11 @@ let nextButton = document.getElementById("next");
 let agentColorElement = document.getElementById("agent-color");
 
 let nodesQuantity = 10;
-let agentsQuantity = 10;
+let agentsQuantity = 100;
 let probabilityMatrix = [];
-let nodeRadius = 120;
-let agentRadius = 20;
-let agentCircleReference = 100;
+let nodeRadius = 90;
+let agentRadius = 12;
+let agentCircleReference = 80;
 let isColorByIsland = agentColorElement.checked;
 
 let backgroundColor = "rgba(61, 121, 253, 0.87)";

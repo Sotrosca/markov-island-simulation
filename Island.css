@@ -2,24 +2,39 @@ h1{
     text-align: center;
 }
 
+.center {
+    display: block;
+    align-items: center;
+}
+
 /* canvas size relative to the window size */
 canvas{
     display: block;
-    margin: 0 auto;
     position: relative;
-    top: 0;
-    left: 0;
-    width: 80%;
-    height: 80%;
+    margin-left: auto;
+    margin-right: auto;
 
 }
 
+.left{
+    float: left;
+    width : 6rem;
+    margin-left: 3rem;
+}
+
+.right{
+    float: right;
+    width : 6rem;
+    margin-right: 3rem;
+
+}
+
+
+
 #next {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
-    height: 100px;
+    position: relative;
+    width: 5rem;
+    height: 5rem;
     background-color: #ff0;
     border-radius: 50%;
     border: 1px solid #000;
@@ -33,12 +48,10 @@ canvas{
     background-color: #f00;
 }
 
-#previous {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100px;
-    height: 100px;
+#reset {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
     background-color: #ff0;
     border-radius: 50%;
     border: 1px solid #000;
@@ -49,9 +62,8 @@ canvas{
 
 /* div with id="agent-color" on left and middle of screen, nice font */
 #agent-color-div {
-    position: absolute;
-    top: 15%;
-    left: 1%;
+    position: relative;
+    display: inline;
     font-family: sans-serif;
     font-size: 0.8rem;
     text-align: center;
