@@ -110,7 +110,7 @@ function generateProbabilityMatrixInput() {
             if (j == -1) {
                 html += "<td>" + (i+1) + "</td>";
             } else {
-                html += "<td><input type='number' class='matrix-input' id='" + i + "-" + j + "' value='" + simulation.probabilityMatrix[i][j] + "' min='0' max='1' step='0.01'></td>";
+                html += "<td><input type='number' class='matrix-input' onClick='this.select()' onkeypress='validateInput(event)' id='" + i + "-" + j + "' value='" + simulation.probabilityMatrix[i][j] + "' min='0' max='1' step='0.01'></td>";
             }
         }
         html += "</tr>";
@@ -120,7 +120,13 @@ function generateProbabilityMatrixInput() {
 
 }
 
-function changeProbabilityMatrix() {
+function validateInput(e){
+    if (e.key.match(/[^0-9,]/g)) {
+        e.preventDefault();
+    }
+}
+
+function changeProbabilityMatrix(e) {
     let matrixInputs = document.getElementsByClassName("matrix-input");
     let newProbabilityMatrix = [];
     for (var i = 0; i < nodesQuantity; i++) {
@@ -128,24 +134,56 @@ function changeProbabilityMatrix() {
         for (var j = 0; j < nodesQuantity; j++) {
             newProbabilityMatrix[i][j] = parseFloat(matrixInputs[i * nodesQuantity + j].value);
         }
+        if (!validateSumOfProbabilityMatrixRow(newProbabilityMatrix[i], i)){
+            // Show error-matrix-message id remove hidden
+            document.getElementById("error-matrix-message").removeAttribute("hidden");
+            return;
+        }
     }
 
     simulation.probabilityMatrix = newProbabilityMatrix;
     drawSimulation();
+    $('#exampleModal').modal('hide');
 }
+
+
 
 function resetSimulationAgents() {
     simulation.resetAgents();
     drawSimulation();
 }
 
-document.getElementById("probability-matrix").innerHTML = generateProbabilityMatrixInput();
+function validateSumOfProbabilityMatrixRow(row, rowNumber) {
+    let sum = 0;
+    for (var i = 0; i < nodesQuantity; i++) {
+        sum += row[i];
+    }
+    if (sum !== 1) {
+        return false;
+    }
+    return true;
 
-$('#exampleModal').modal('handleUpdate');
+}
+
+function setProbabilityMatrix() {
+    document.getElementById("probability-matrix").innerHTML = generateProbabilityMatrixInput();
+}
+
+
+setProbabilityMatrix();
 
 document.getElementById("save-matrix").addEventListener("click", changeProbabilityMatrix);
 
 document.getElementById("reset").addEventListener("click", resetSimulationAgents);
+
+$('#exampleModal').modal('handleUpdate');
+
+
+$('#exampleModal').on('hidden.bs.modal', function (e) {
+    console.log(e);
+    document.getElementById("error-matrix-message").setAttribute("hidden", "true");
+    setProbabilityMatrix();
+});
 
 drawSimulation();
 

@@ -16,6 +16,29 @@ h1{
 .matrix-input {
     text-align: center;
     width: 4rem;
+    /*quit arrow of input*/
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    appearance: textfield;
+    /*remove underline*/
+    -moz-outline-style: none;
+    -webkit-outline-style: none;
+    outline-style: none;
+    /*remove background*/
+    background: transparent;
+    /*remove border*/
+    border: none;
+    /*remove padding*/
+    padding: 0;
+    /* add border-bottom*/
+    border-bottom: 1px solid #000;
+
+}
+
+.matrix-input:hover {
+    border-bottom: 1px solid #000;
+    /*pointer*/
+    cursor: pointer;
 }
 
 td {
@@ -82,6 +105,10 @@ canvas{
     border: 1px solid #000;
     box-shadow: 0 0 10px #000;
     cursor: pointer;
+}
+
+#reset:hover {
+    background-color: #f00;
 }
 
 
