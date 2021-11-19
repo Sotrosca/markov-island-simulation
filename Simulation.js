@@ -158,11 +158,8 @@ function validateSumOfProbabilityMatrixRow(row, rowNumber) {
     for (var i = 0; i < nodesQuantity; i++) {
         sum += row[i];
     }
-    if (sum !== 1) {
-        return false;
-    }
-    return true;
-
+    // Check if the sum of the row is 1 with a tolerance of 0.01
+    return sum <= 1.01 && sum >= 0.99;
 }
 
 function setProbabilityMatrix() {
