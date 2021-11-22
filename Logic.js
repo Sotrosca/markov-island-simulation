@@ -56,6 +56,33 @@ class Simulation {
         }
         return nodesAgentListDict;
     }
+
+    addNewAgents(agentsQuantity) {
+        let agentsLength = this.agents.length;
+        for (var i = 0; i < agentsQuantity; i++) {
+            this.agents.push(new Agent(agentsLength + i, this.getRandomNode()));
+        }
+    }
+
+    removeAgents(agentsQuantity) {
+        for (var i = 0; i < agentsQuantity; i++) {
+            this.agents.pop();
+        }
+    }
+
+    // Receive new agentsQuantity and check if the new quantity is greater or less than the current and call the appropiate method
+    changeAgentsQuantity(agentsQuantity) {
+        let newAgentsQuantity;
+        if (agentsQuantity > this.agentsQuantity) {
+            newAgentsQuantity = agentsQuantity - this.agentsQuantity;
+            this.addNewAgents(newAgentsQuantity);
+        } else {
+            newAgentsQuantity = this.agentsQuantity - agentsQuantity;
+            this.removeAgents(newAgentsQuantity);
+        }
+        this.agentsQuantity = agentsQuantity;
+    }
+
 }
 
 class Agent {

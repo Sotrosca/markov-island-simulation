@@ -3,14 +3,22 @@ let nextButton = document.getElementById("next");
 
 // Get element with id="agent-color"
 let agentColorElement = document.getElementById("agent-color");
+let nodesQuantityInput = document.getElementById("nodes-quantity");
+let agentsQuantityInput = document.getElementById("agents-quantity");
 
-let nodesQuantity = 4;
-let agentsQuantity = 20;
-let probabilityMatrix = [];
-let nodeRadius = 70;
-let agentRadius = 12;
-let agentCircleReference = 50;
+let initialNodesQuantity = 4;
+let initialAgentsQuantity = 10;
+let probabilityMatrix = setUniformProbabilityMatrix(initialNodesQuantity);
+let nodeRadius = 100;
+let agentRadius = 10;
+let agentCircleReference = nodeRadius - 10;
 let isColorByIsland = agentColorElement.checked;
+
+nodesQuantityInput.value = initialNodesQuantity;
+agentsQuantityInput.value = initialAgentsQuantity;
+
+let simulation = new Simulation(initialNodesQuantity, initialAgentsQuantity, probabilityMatrix);
+
 
 let backgroundColor = "rgba(61, 121, 253, 0.87)";
 let nodeColor = "rgba(29, 206, 32, 1)";
@@ -28,35 +36,35 @@ let canvasWidth = canvas.width;
 let canvasHeight = canvas.height;
 
 // Assign a random position to each node without overlapping with others nodes and fit in the canvas
-let nodesPositions = [];
-for (var i = 0; i < nodesQuantity; i++) {
+let nodesPositions = calculateNodePositions(simulation.nodesQuantity);
 
-    let x = Math.floor(Math.random() * (canvasWidth - nodeRadius * 2)) + nodeRadius;
-    let y = Math.floor(Math.random() * (canvasHeight - nodeRadius * 2)) + nodeRadius;
-    // Check if the node is overlapping with other nodes using nodeRadius
-    while (nodesPositions.some(node => getDistance(node[0], node[1], x, y) < nodeRadius * 2)) {
-        x = Math.floor(Math.random() * (canvasWidth - nodeRadius * 2)) + nodeRadius;
-        y = Math.floor(Math.random() * (canvasHeight - nodeRadius * 2)) + nodeRadius;
+function calculateNodePositions(nodesQuantity) {
+    let nodesPositions = [];
+    for (var i = 0; i < nodesQuantity; i++) {
+
+        let x = Math.floor(Math.random() * (canvasWidth - nodeRadius * 2)) + nodeRadius;
+        let y = Math.floor(Math.random() * (canvasHeight - nodeRadius * 2)) + nodeRadius;
+        // Check if the node is overlapping with other nodes using nodeRadius
+        while (nodesPositions.some(node => getDistance(node[0], node[1], x, y) < nodeRadius * 2)) {
+            x = Math.floor(Math.random() * (canvasWidth - nodeRadius * 2)) + nodeRadius;
+            y = Math.floor(Math.random() * (canvasHeight - nodeRadius * 2)) + nodeRadius;
+        }
+        nodesPositions.push([x, y]);
     }
-    nodesPositions.push([x, y]);
+
+    return nodesPositions;
 }
 
-// Build probability matrix
-for (var i = 0; i < nodesQuantity; i++) {
-    probabilityMatrix[i] = [];
-    for (var j = 0; j < nodesQuantity; j++) {
-        probabilityMatrix[i][j] = 1 / nodesQuantity;
+function setUniformProbabilityMatrix(nodesQuantity) {
+    let probabilityMatrix = [];
+    for (var i = 0; i < nodesQuantity; i++) {
+        probabilityMatrix[i] = [];
+        for (var j = 0; j < nodesQuantity; j++) {
+            probabilityMatrix[i][j] = 1 / nodesQuantity;
+        }
     }
+    return probabilityMatrix;
 }
-
-for (var i = 0; i < nodesQuantity; i++) {
-    probabilityMatrix[0][i] = 0;
-}
-
-probabilityMatrix[0][nodesQuantity - 1] = 1;
-
-let simulation = new Simulation(nodesQuantity, agentsQuantity, probabilityMatrix);
-
 
 function drawSimulation() {
     clearCanvas();
@@ -70,7 +78,7 @@ function drawSimulation() {
     let nodesAgentListDict = simulation.getNodesAgentListDict();
 
     // Draw all agents in their initial positions using drawAgents
-    for (var i = 0; i < nodesQuantity; i++) {
+    for (var i = 0; i < simulation.nodesQuantity; i++) {
         drawAgents(nodesAgentListDict[i], nodesPositions[i][0], nodesPositions[i][1], agentCircleReference, agentRadius, colorsList, agentTextColor, isColorByIsland, simulation.agents);
     }
 }
@@ -94,7 +102,7 @@ function generateProbabilityMatrixInput() {
     let html = "";
     // Generate header with the nodes names
     html += "<tr>";
-    for (var i = -1; i < nodesQuantity; i++) {
+    for (var i = -1; i < simulation.nodesQuantity; i++) {
         if (i === -1) {
             html += "<th></th>";
         } else {
@@ -104,13 +112,13 @@ function generateProbabilityMatrixInput() {
     html += "</tr>";
 
     // Generate rows with the probability matrix
-    for (var i = 0; i < nodesQuantity; i++) {
+    for (var i = 0; i < simulation.nodesQuantity; i++) {
         html += "<tr>";
-        for (var j = -1; j < nodesQuantity; j++) {
+        for (var j = -1; j < simulation.nodesQuantity; j++) {
             if (j == -1) {
                 html += "<td>" + (i+1) + "</td>";
             } else {
-                html += "<td><input type='number' class='matrix-input' onClick='this.select()' onkeypress='validateInput(event)' id='" + i + "-" + j + "' value='" + simulation.probabilityMatrix[i][j] + "' min='0' max='1' step='0.01'></td>";
+                html += "<td><input type='number' class='matrix-input' onClick='this.select()' onkeypress='validateMatrixInput(event)' id='" + i + "-" + j + "' value='" + parseFloat(simulation.probabilityMatrix[i][j] * 100) + "' min='0' max='1' step='0.01'></td>";
             }
         }
         html += "</tr>";
@@ -120,8 +128,16 @@ function generateProbabilityMatrixInput() {
 
 }
 
-function validateInput(e){
+function validateMatrixInput(e){
     if (e.key.match(/[^0-9,]/g)) {
+        e.preventDefault();
+    }
+}
+
+
+function validatePositiveIntegerInput(e) {
+    // Validate positive integer input and allows press enter key
+    if (e.key.match(/[^0-9,]/g) && e.key !== "Enter") {
         e.preventDefault();
     }
 }
@@ -129,18 +145,19 @@ function validateInput(e){
 function changeProbabilityMatrix(e) {
     let matrixInputs = document.getElementsByClassName("matrix-input");
     let newProbabilityMatrix = [];
-    for (var i = 0; i < nodesQuantity; i++) {
+    for (var i = 0; i < simulation.nodesQuantity; i++) {
         newProbabilityMatrix[i] = [];
-        for (var j = 0; j < nodesQuantity; j++) {
-            newProbabilityMatrix[i][j] = parseFloat(matrixInputs[i * nodesQuantity + j].value);
+        for (var j = 0; j < simulation.nodesQuantity; j++) {
+            newProbabilityMatrix[i][j] = parseFloat(matrixInputs[i * simulation.nodesQuantity + j].value) / 100;
         }
         if (!validateSumOfProbabilityMatrixRow(newProbabilityMatrix[i], i)){
             // Show error-matrix-message id remove hidden
             document.getElementById("error-matrix-message").removeAttribute("hidden");
             return;
         }
-    }
 
+    }
+    console.log(newProbabilityMatrix);
     simulation.probabilityMatrix = newProbabilityMatrix;
     drawSimulation();
     $('#exampleModal').modal('hide');
@@ -155,11 +172,11 @@ function resetSimulationAgents() {
 
 function validateSumOfProbabilityMatrixRow(row, rowNumber) {
     let sum = 0;
-    for (var i = 0; i < nodesQuantity; i++) {
+    for (var i = 0; i < simulation.nodesQuantity; i++) {
         sum += row[i];
     }
     // Check if the sum of the row is 1 with a tolerance of 0.01
-    return sum <= 1.01 && sum >= 0.99;
+    return sum <= 1.0001 && sum >= 0.9999;
 }
 
 function setProbabilityMatrix() {
@@ -177,10 +194,27 @@ $('#exampleModal').modal('handleUpdate');
 
 
 $('#exampleModal').on('hidden.bs.modal', function (e) {
-    console.log(e);
     document.getElementById("error-matrix-message").setAttribute("hidden", "true");
     setProbabilityMatrix();
 });
+
+nodesQuantityInput.addEventListener('change', function (e) {
+    newNodesQuantity = parseInt(e.target.value);
+    probabilityMatrix = setUniformProbabilityMatrix(newNodesQuantity);
+    simulation = new Simulation(newNodesQuantity, simulation.agentsQuantity, probabilityMatrix);
+    nodesPositions = calculateNodePositions(simulation.nodesQuantity);
+    setProbabilityMatrix();
+    drawSimulation();
+});
+
+agentsQuantityInput.addEventListener('change', function (e) {
+    agentsQuantity = parseInt(e.target.value);
+    simulation.changeAgentsQuantity(agentsQuantity);
+    setProbabilityMatrix()
+    drawSimulation();
+});
+
+
 
 drawSimulation();
 

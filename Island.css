@@ -13,6 +13,7 @@ h1{
     align-items: center;
 }
 
+
 .matrix-input {
     text-align: center;
     width: 4rem;
@@ -41,6 +42,15 @@ h1{
     cursor: pointer;
 }
 
+.input {
+    text-align: center;
+    /*quit arrow of input*/
+    appearance: textfield;
+    /*remove padding*/
+    padding: 0;
+    width: 100%;
+}
+
 td {
     width: 2rem;
     text-align: center;
@@ -60,6 +70,20 @@ canvas{
 
 }
 
+.title {
+    text-align: center;
+}
+
+ul {
+    text-align: left;
+    padding: 0;
+}
+
+li {
+    list-style-type: none;
+    text-align: center;
+}
+
 .left{
     float: left;
     width : 6rem;
@@ -74,9 +98,27 @@ canvas{
 }
 
 .row-side {
-    margin-top : 1rem;
-    margin-bottom : 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    border: none;
+    border-bottom: 1px solid #000;
+}
+
+.center {
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-text {
+    text-align: center;
 }
 
 #next {

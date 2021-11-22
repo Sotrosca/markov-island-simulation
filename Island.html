@@ -13,12 +13,22 @@
     <!--Button with id="next"-->
     <div class="left">
         <div id="reset-div" class="row-side">
-            <button id="reset">Reset <br> Agents</button>
+            <button id="reset">Reset</button>
         </div>
         <div class="row-side">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 Probabilidades
             </button>
+        </div>
+        <div class="row-side">
+            <h6 class="title">Habitantes<br>por isla</h5>
+            <ul>
+                <li>1: 40</li>
+                <li>2: 40</li>
+                <li>2: 40</li>
+                <li>2: 40</li>
+                <li>2: 40</li>
+            </ul>
         </div>
     </div>
     <div class="right">
@@ -27,13 +37,21 @@
             <button id="next">Next</button>
         </div>
         <div id=agent-color-div class="row-side">
-            <p>Color por isla</p>
-            <div>
+            <p class="center-text">Color por isla</p>
+            <div class="center">
                 <label class="switch">
                     <input type="checkbox" id="agent-color">
                     <span class="slider round"></span>
                 </label>
             </div>
+        </div>
+        <div id="nodes-quantity-div" class="row-side">
+            <label for="nodes-quantity">Islas</label>
+            <input type="number" class="input" id="nodes-quantity" onkeypress="validatePositiveIntegerInput(event)">
+        </div>
+        <div id="agents-quantity-div" class="row-side">
+            <label for="agents-quantity">Habitantes</label>
+            <input type="number" class="input" id="agents-quantity">
         </div>
     </div>
 
@@ -67,6 +85,7 @@
     <div class=center>
         <canvas id="myCanvas" width="1000" height="550"></canvas>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>    <script src="./Drawer.js"></script>
