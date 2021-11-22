@@ -86,6 +86,7 @@ function drawSimulation() {
 function nextStep() {
     simulation.runOneEpoch();
     drawSimulation();
+    updateAgentsQuantityByIslandList();
 }
 
 // Add event listener to agent-color element
@@ -128,12 +129,30 @@ function generateProbabilityMatrixInput() {
 
 }
 
+function updateAgentsQuantityByIslandList() {
+    let html = "";
+    let nodesAgentListDict = simulation.getNodesAgentListDict();
+    for (var i = 0; i < simulation.nodesQuantity; i++) {
+        html += "<li>";
+        // island id bold
+        html += "<b>" + (i + 1) + ": </b>";
+        // check if exists i key on dict
+        if (nodesAgentListDict.hasOwnProperty(i)) {
+            html += nodesAgentListDict[i].length;
+        } else {
+            html += 0;
+        }
+        html += "</li>";
+    }
+
+    document.getElementById("agents-by-island-quantity-list").innerHTML = html;
+}
+
 function validateMatrixInput(e){
     if (e.key.match(/[^0-9,]/g)) {
         e.preventDefault();
     }
 }
-
 
 function validatePositiveIntegerInput(e) {
     // Validate positive integer input and allows press enter key
@@ -205,16 +224,19 @@ nodesQuantityInput.addEventListener('change', function (e) {
     nodesPositions = calculateNodePositions(simulation.nodesQuantity);
     setProbabilityMatrix();
     drawSimulation();
+    updateAgentsQuantityByIslandList();
 });
 
 agentsQuantityInput.addEventListener('change', function (e) {
     agentsQuantity = parseInt(e.target.value);
     simulation.changeAgentsQuantity(agentsQuantity);
-    setProbabilityMatrix()
+    setProbabilityMatrix();
     drawSimulation();
+    updateAgentsQuantityByIslandList();
 });
 
 
 
 drawSimulation();
+updateAgentsQuantityByIslandList();
 
