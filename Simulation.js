@@ -39,20 +39,25 @@ let canvasHeight = canvas.height;
 let nodesPositions = calculateNodePositions(simulation.nodesQuantity);
 
 function calculateNodePositions(nodesQuantity) {
-    let nodesPositions = [];
+    let trys = 1000;
+    let newNodesPositions = [];
     for (var i = 0; i < nodesQuantity; i++) {
 
         let x = Math.floor(Math.random() * (canvasWidth - nodeRadius * 2)) + nodeRadius;
         let y = Math.floor(Math.random() * (canvasHeight - nodeRadius * 2)) + nodeRadius;
         // Check if the node is overlapping with other nodes using nodeRadius
-        while (nodesPositions.some(node => getDistance(node[0], node[1], x, y) < nodeRadius * 2)) {
+        while (newNodesPositions.some(node => getDistance(node[0], node[1], x, y) < nodeRadius * 2) && trys > 0) {
             x = Math.floor(Math.random() * (canvasWidth - nodeRadius * 2)) + nodeRadius;
             y = Math.floor(Math.random() * (canvasHeight - nodeRadius * 2)) + nodeRadius;
+            trys -= 1;
         }
-        nodesPositions.push([x, y]);
+        if (trys <= 0) {
+            return null;
+        }
+        newNodesPositions.push([x, y]);
     }
 
-    return nodesPositions;
+    return newNodesPositions;
 }
 
 function setUniformProbabilityMatrix(nodesQuantity) {
@@ -176,7 +181,6 @@ function changeProbabilityMatrix(e) {
         }
 
     }
-    console.log(newProbabilityMatrix);
     simulation.probabilityMatrix = newProbabilityMatrix;
     drawSimulation();
     $('#exampleModal').modal('hide');
@@ -217,14 +221,29 @@ $('#exampleModal').on('hidden.bs.modal', function (e) {
     setProbabilityMatrix();
 });
 
+let nodesQuantityExcededCounter = 0;
+
 nodesQuantityInput.addEventListener('change', function (e) {
     newNodesQuantity = parseInt(e.target.value);
-    probabilityMatrix = setUniformProbabilityMatrix(newNodesQuantity);
-    simulation = new Simulation(newNodesQuantity, simulation.agentsQuantity, probabilityMatrix);
-    nodesPositions = calculateNodePositions(simulation.nodesQuantity);
-    setProbabilityMatrix();
-    drawSimulation();
-    updateAgentsQuantityByIslandList();
+    nodesPositions = calculateNodePositions(newNodesQuantity);
+    if (nodesPositions === null) {
+        // set input value to the previous value
+        nodesQuantityInput.value = simulation.nodesQuantity;
+        // Show error modal
+        $('#errorModal').modal('show');
+        if (nodesQuantityExcededCounter > 0) {
+            // Change error message
+            document.getElementById("error-message").innerHTML = "Usted no aprende verdad !! <br><br> Y pensar que me caías bien :(";
+        }
+        nodesQuantityExcededCounter++;
+    } else {
+        probabilityMatrix = setUniformProbabilityMatrix(newNodesQuantity);
+        simulation = new Simulation(newNodesQuantity, simulation.agentsQuantity, probabilityMatrix);
+        setProbabilityMatrix();
+        drawSimulation();
+        updateAgentsQuantityByIslandList();
+    }
+
 });
 
 agentsQuantityInput.addEventListener('change', function (e) {

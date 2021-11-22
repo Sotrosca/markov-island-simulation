@@ -36,6 +36,14 @@ h1{
 
 }
 
+#error-message  {
+    /*change font type*/
+    font-family: 'Roboto', sans-serif;
+    /*change text align*/
+    text-align: center;
+
+}
+
 .matrix-input:hover {
     border-bottom: 1px solid #000;
     /*pointer*/
