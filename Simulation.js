@@ -5,11 +5,16 @@ let nextButton = document.getElementById("next");
 let agentColorElement = document.getElementById("agent-color");
 let nodesQuantityInput = document.getElementById("nodes-quantity");
 let agentsQuantityInput = document.getElementById("agents-quantity");
+// Get canvas size
+let canvas = document.getElementById("myCanvas");
+let canvasWidth = canvas.width;
+let canvasHeight = canvas.height;
 
+// Define inti values
 let initialNodesQuantity = 4;
 let initialAgentsQuantity = 10;
 let probabilityMatrix = setUniformProbabilityMatrix(initialNodesQuantity);
-let nodeRadius = 100;
+let nodeRadius = estimateOptimalNodeRadiusForDraw(initialNodesQuantity);
 let agentRadius = 10;
 let agentCircleReference = nodeRadius - 10;
 let isColorByIsland = agentColorElement.checked;
@@ -30,15 +35,26 @@ let canvasBorderColor = "black";
 
 let colorsList = ["red", "yellow", "fuchsia", "darkslateblue", "green", "blue", "purple", "orange", "brown", "pink", "grey", "darkgrey", "lightgrey", "white"];
 
-// Get canvas size
-let canvas = document.getElementById("myCanvas");
-let canvasWidth = canvas.width;
-let canvasHeight = canvas.height;
 
 // Assign a random position to each node without overlapping with others nodes and fit in the canvas
 let nodesPositions = calculateNodePositions(simulation.nodesQuantity);
 
+function estimateOptimalNodeRadiusForDraw(nodesQuantity) {
+    let a = Math.log(nodesQuantity * 10000) ;
+    console.log(a)
+    let estimatedNodeRadius = parseInt(canvasWidth / a);
+    return estimatedNodeRadius;
+}
+
+function adjustVariablesSize(nodesQuantity) {
+    nodeRadius = estimateOptimalNodeRadiusForDraw(nodesQuantity);
+    agentCircleReference = nodeRadius - 10;
+    agentRadius = parseInt(nodeRadius / 8);
+}
+
 function calculateNodePositions(nodesQuantity) {
+    estimateOptimalNodeRadiusForDraw(nodesQuantity);
+    adjustVariablesSize(nodesQuantity);
     let trys = 1000;
     let newNodesPositions = [];
     for (var i = 0; i < nodesQuantity; i++) {
@@ -231,7 +247,10 @@ nodesQuantityInput.addEventListener('change', function (e) {
         nodesQuantityInput.value = simulation.nodesQuantity;
         // Show error modal
         if (nodesQuantityExcededCounter === 0) {
-            document.getElementById("error-message").innerHTML = "Nadie puede tener tantas islas.<br><br>Cuando seas menos codicioso vuelve y pídeme una cantidad de islas razonable.<br><br>Gracias por su comprensión :)";
+            document.getElementById("error-message").innerHTML = "Nadie puede tener tantas islas.<br><br>Cuando seas menos codicioso vuelve y pídeme una cantidad de islas razonable.<br><br>O vuelve a probar suerte, como quieras. <br><br> Gracias por su comprensión :)";
+        }
+        else if (nodesQuantityExcededCounter === 1) {
+            document.getElementById("error-message").innerHTML = "Al parecer tu suerte no ha cambiado. <br><br> Insisto que tu codicia debe ser el problema. <br><br> Evita caer al lado oscuro. <br><br> Pídeme menos islas por favor !!!"
         }
         else {
             // Change error message
