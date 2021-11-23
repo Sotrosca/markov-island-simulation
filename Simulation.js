@@ -40,7 +40,7 @@ let colorsList = ["red", "yellow", "fuchsia", "darkslateblue", "green", "blue", 
 let nodesPositions = calculateNodePositions(simulation.nodesQuantity);
 
 function estimateOptimalNodeRadiusForDraw(nodesQuantity) {
-    let a = Math.log(nodesQuantity * 10000) ;
+    let a = Math.log(nodesQuantity * 6000) ;
     console.log(a)
     let estimatedNodeRadius = parseInt(canvasWidth / a);
     return estimatedNodeRadius;
@@ -48,7 +48,7 @@ function estimateOptimalNodeRadiusForDraw(nodesQuantity) {
 
 function adjustVariablesSize(nodesQuantity) {
     nodeRadius = estimateOptimalNodeRadiusForDraw(nodesQuantity);
-    agentCircleReference = nodeRadius - 10;
+    agentCircleReference = parseInt(nodeRadius * 0.9);
     agentRadius = parseInt(nodeRadius / 8);
 }
 
