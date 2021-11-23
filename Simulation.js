@@ -192,6 +192,7 @@ function changeProbabilityMatrix(e) {
         }
         if (!validateSumOfProbabilityMatrixRow(newProbabilityMatrix[i], i)){
             // Show error-matrix-message id remove hidden
+            document.getElementById("error-matrix-message").innerHTML = "La suma de la fila <b>"  + (i + 1) + "</b> no es igual a 100 !!!";
             document.getElementById("error-matrix-message").removeAttribute("hidden");
             return;
         }

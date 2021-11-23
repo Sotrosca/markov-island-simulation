@@ -61,6 +61,7 @@ h1{
 
 td {
     width: 2rem;
+    padding: 0.3rem;
     text-align: center;
 }
 
@@ -242,4 +243,9 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+#error-matrix-message {
+    margin: auto;
+    margin-top: 1rem;
 }
