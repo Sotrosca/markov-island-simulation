@@ -225,18 +225,22 @@ let nodesQuantityExcededCounter = 0;
 
 nodesQuantityInput.addEventListener('change', function (e) {
     newNodesQuantity = parseInt(e.target.value);
-    nodesPositions = calculateNodePositions(newNodesQuantity);
-    if (nodesPositions === null) {
+    newNodesPositions = calculateNodePositions(newNodesQuantity);
+    if (newNodesPositions === null) {
         // set input value to the previous value
         nodesQuantityInput.value = simulation.nodesQuantity;
         // Show error modal
-        $('#errorModal').modal('show');
-        if (nodesQuantityExcededCounter > 0) {
+        if (nodesQuantityExcededCounter === 0) {
+            document.getElementById("error-message").innerHTML = "Nadie puede tener tantas islas.<br><br>Cuando seas menos codicioso vuelve y pídeme una cantidad de islas razonable.<br><br>Gracias por su comprensión :)";
+        }
+        else {
             // Change error message
             document.getElementById("error-message").innerHTML = "Usted no aprende verdad !! <br><br> Y pensar que me caías bien :(";
         }
+        $('#errorModal').modal('show');
         nodesQuantityExcededCounter++;
     } else {
+        nodesPositions = newNodesPositions;
         probabilityMatrix = setUniformProbabilityMatrix(newNodesQuantity);
         simulation = new Simulation(newNodesQuantity, simulation.agentsQuantity, probabilityMatrix);
         setProbabilityMatrix();
@@ -246,12 +250,25 @@ nodesQuantityInput.addEventListener('change', function (e) {
 
 });
 
+let agentsQuantityExcededCounter = 0;
 agentsQuantityInput.addEventListener('change', function (e) {
     agentsQuantity = parseInt(e.target.value);
-    simulation.changeAgentsQuantity(agentsQuantity);
-    setProbabilityMatrix();
-    drawSimulation();
-    updateAgentsQuantityByIslandList();
+    if (agentsQuantity > 500) {
+        agentsQuantityInput.value = simulation.agentsQuantity;
+        if (agentsQuantityExcededCounter === 0) {
+            document.getElementById("error-message").innerHTML = "Esto no es una fiesta en la playa. <br><br> No puede haber tanta gente junta. <br><br> Seguimos en pandemia !!";
+        } else {
+            document.getElementById("error-message").innerHTML = "Alguien puede pensar en los niños !!";
+        }
+        $('#errorModal').modal('show');
+        agentsQuantityExcededCounter++;
+    } else {
+        simulation.changeAgentsQuantity(agentsQuantity);
+        setProbabilityMatrix();
+        drawSimulation();
+        updateAgentsQuantityByIslandList();
+    }
+
 });
 
 
