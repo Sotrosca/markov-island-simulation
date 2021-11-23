@@ -6,6 +6,7 @@ body {
     background-position: center;
     background-attachment: fixed;
     background-color: #f2f2f2;
+    margin-top: 3rem;
 }
 
 h1{
@@ -250,11 +251,11 @@ li {
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #ffc107;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #ffc107;
 }
 
 input:checked + .slider:before {
@@ -279,7 +280,7 @@ input:checked + .slider:before {
 
 .card {
     /*background-color yellow and transparent;*/
-    background-color: rgba(255, 255, 0, 0.9);
+    background-color: rgba(255, 255, 0, 1);
     margin-top: 1rem;
     border: none;
     padding-top: 0.5rem;
