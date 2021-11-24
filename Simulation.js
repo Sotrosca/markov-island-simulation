@@ -41,7 +41,6 @@ let nodesPositions = calculateNodePositions(simulation.nodesQuantity);
 
 function estimateOptimalNodeRadiusForDraw(nodesQuantity) {
     let a = Math.log(nodesQuantity * 6000) ;
-    console.log(a)
     let estimatedNodeRadius = parseInt(canvasWidth / a);
     return estimatedNodeRadius;
 }
@@ -150,6 +149,38 @@ function generateProbabilityMatrixInput() {
 
 }
 
+function generateMatrixHtml(matrix, name) {
+
+    matrixSize = matrix.length;
+
+    let html = "";
+    // Generate header with the nodes names
+    html += "<tr>";
+    for (var i = -1; i < matrixSize; i++) {
+        if (i === -1) {
+            html += "<th></th>";
+        } else {
+            html += "<th>" + (i + 1) + "</th>";
+        }
+    }
+    html += "</tr>";
+
+    // Generate rows with the matrix
+    for (var i = 0; i < matrixSize; i++) {
+        html += "<tr>";
+        for (var j = -1; j < matrixSize; j++) {
+            if (j == -1) {
+                html += "<td>" + (i+1) + "</td>";
+            } else {
+                html += "<td><input type='number' class='matrix-input' style='color : black '  id='" + name + "-" + i + "-" + j + "' value='" + parseFloat(matrix[i][j] * 100) + "' disabled ></td>";
+            }
+        }
+        html += "</tr>";
+    }
+
+    return html;
+}
+
 function updateAgentsQuantityByIslandList() {
     let html = "";
     let nodesAgentListDict = simulation.getNodesAgentListDict();
@@ -230,6 +261,8 @@ document.getElementById("save-matrix").addEventListener("click", changeProbabili
 
 document.getElementById("reset").addEventListener("click", resetSimulationAgents);
 
+document.getElementById("select-matrix").addEventListener("click", changeProbabilityMatrixFromPreselectedMatrix);
+
 $('#exampleModal').modal('handleUpdate');
 
 
@@ -264,6 +297,7 @@ nodesQuantityInput.addEventListener('change', function (e) {
         probabilityMatrix = setUniformProbabilityMatrix(newNodesQuantity);
         simulation = new Simulation(newNodesQuantity, simulation.agentsQuantity, probabilityMatrix);
         setProbabilityMatrix();
+        populatePreselectionableMatrixModal()
         drawSimulation();
         updateAgentsQuantityByIslandList();
     }
@@ -291,8 +325,92 @@ agentsQuantityInput.addEventListener('change', function (e) {
 
 });
 
+function createPartyProbabilityMatrix(nodesQuantity) {
+    let probabilityMatrix = [];
+    for (var i = 0; i < nodesQuantity; i++) {
+        probabilityMatrix[i] = [];
+        for (var j = 0; j < nodesQuantity; j++) {
+            if (i === j) {
+                probabilityMatrix[i][j] = 0;
+            } else {
+                probabilityMatrix[i][j] = 1 / (nodesQuantity - 1);
+            }
+        }
+    }
+    return probabilityMatrix;
+}
+
+function createSedentaryProbabilityMatrix(nodesQuantity) {
+    let probabilityMatrix = [];
+    for (var i = 0; i < nodesQuantity; i++) {
+        probabilityMatrix[i] = [];
+        for (var j = 0; j < nodesQuantity; j++) {
+            if (i === j) {
+                probabilityMatrix[i][j] = 0.9;
+            } else {
+                probabilityMatrix[i][j] = 0.1 / (nodesQuantity - 1);
+            }
+        }
+    }
+    return probabilityMatrix;
+}
+
+// First and last node has greater probability compared to the others the sum of each row is 1
+function createRivalsProbabilityMatrix(nodesQuantity) {
+    let probabilityMatrix = [];
+    for (var i = 0; i < nodesQuantity; i++) {
+        probabilityMatrix[i] = [];
+        for (var j = 0; j < nodesQuantity; j++) {
+            if (j === 0 || j === nodesQuantity - 1) {
+                probabilityMatrix[i][j] = 0.4;
+            } else {
+                probabilityMatrix[i][j] = 0.2 / (nodesQuantity - 2);
+            }
+        }
+    }
+    return probabilityMatrix;
+}
+
+let partyMatrix;
+let sedentaryMatrix;
+let rivalsMatrix;
+
+function populatePreselectionableMatrixModal() {
+    let party = createPartyProbabilityMatrix(simulation.nodesQuantity);
+    let sedentary = createSedentaryProbabilityMatrix(simulation.nodesQuantity);
+    let rivals = createRivalsProbabilityMatrix(simulation.nodesQuantity);
+
+    partyMatrix = party;
+    sedentaryMatrix = sedentary;
+    rivalsMatrix = rivals;
+
+    document.getElementById("party-matrix").innerHTML = generateMatrixHtml(party, "party");
+    document.getElementById("sedentary-matrix").innerHTML = generateMatrixHtml(sedentary, "sedentary");
+    document.getElementById("rivals-matrix").innerHTML = generateMatrixHtml(rivals, "rivals");
+
+}
+
+function changeProbabilityMatrixFromPreselectedMatrix() {
+    let navId = document.getElementById("nav-tabContent").getElementsByClassName("active")[0].id;
+    let newProbabilityMatrix;
+    switch (navId) {
+        case "nav-party":
+            newProbabilityMatrix = partyMatrix;
+            break;
+        case "nav-sedentary":
+            newProbabilityMatrix = sedentaryMatrix;
+            break;
+        case "nav-rivals":
+            newProbabilityMatrix = rivalsMatrix;
+            break;
+    }
+
+    simulation.probabilityMatrix = newProbabilityMatrix;
+    setProbabilityMatrix();
+    $('#probabilityMatrixSelectionModal').modal('hide');
+}
 
 
+populatePreselectionableMatrixModal();
 drawSimulation();
 updateAgentsQuantityByIslandList();
-
